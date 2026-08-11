@@ -1,0 +1,28 @@
+# Dev tooling
+.claude/
+.fallow/
+.fallowrc.json
+.github/
+.gitignore
+.husky/
+.nvmrc
+.scratch/
+.todo/
+biome.json
+bun.lock
+
+# Project docs
+AGENTS.md
+CONTEXT.md
+
+# Test helpers inside src/
+src/**/*_test.helpers.ts
+
+# Build / test artifacts
+coverage/
+docs/
+examples/
+node_modules/
+scripts/
+tests/
+tsconfig.dev.json

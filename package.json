@@ -10,6 +10,9 @@
     "type": "module",
     "private": false,
     "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
     "scripts": {
         "test": "bun test",
         "test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=coverage && node scripts/lcov-to-istanbul.js",
