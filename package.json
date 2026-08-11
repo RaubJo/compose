@@ -1,7 +1,15 @@
 {
     "name": "@raubjo/compose",
+    "version": "0.1.0",
+    "author": {
+        "name": "Joseph Raub",
+        "email": "joseph@raubstudios.com",
+        "url": "https://www.raubstudios.com"
+    },
     "module": "index.ts",
     "type": "module",
+    "private": false,
+    "license": "MIT",
     "scripts": {
         "test": "bun test",
         "test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=coverage && node scripts/lcov-to-istanbul.js",
