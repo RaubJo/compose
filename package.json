@@ -1,0 +1,24 @@
+{
+    "name": "@raubjo/compose",
+    "module": "index.ts",
+    "type": "module",
+    "scripts": {
+        "test": "bun test",
+        "test:coverage": "bun test --coverage --coverage-reporter=lcov --coverage-dir=coverage && node scripts/lcov-to-istanbul.js",
+        "fallow": "npm run test:coverage && npx fallow health --coverage coverage/coverage-final.json",
+        "fix": "biome check --fix && fallow fix",
+        "version:major": "npm verison major",
+        "version:minor": "npm verison minor",
+        "version:patch": "npm verison patch",
+        "release": "npm publish",
+        "prepare": "bun husky"
+    },
+    "devDependencies": {
+        "@types/bun": "latest",
+        "fallow": "^2.67.0",
+        "husky": "^9.1.7"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    }
+}
