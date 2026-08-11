@@ -12,7 +12,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/RaubJo/compose"
+        "url": "git+https://github.com/RaubJo/compose"
     },
     "publishConfig": {
         "access": "public"
