@@ -1,7 +1,9 @@
 import { copyProperties } from "./copyProperties"
-import type { Constructor, InstanceOf, UnionToIntersection } from "./types"
+import { resolveDependencies } from "./resolveDependencies"
+import type { Composable, Constructor, ExpandTraits, InstanceOf, UnionToIntersection } from "./types"
 
-type ComposedInstance<Traits extends readonly Constructor[]> = Compose & UnionToIntersection<InstanceOf<Traits[number]>>
+type ComposedInstance<Traits extends readonly Constructor[]> = Compose &
+    UnionToIntersection<InstanceOf<ExpandTraits<Traits>[number]>>
 
 type ComposedConstructor<Traits extends readonly Constructor[]> = new (...args: any[]) => ComposedInstance<Traits>
 
@@ -12,7 +14,8 @@ export class Compose {
     static with<const Traits extends readonly Constructor[]>(...traits: Traits): ComposedConstructor<Traits>
     static with(...args: any[]): ComposedConstructor<any> {
         // ponytail: array-arg call style kept for back-compat, no known callers use it
-        const traits: Constructor[] = Array.isArray(args[0]) ? args[0] : args
+        const requested: Composable[] = Array.isArray(args[0]) ? args[0] : args
+        const traits = resolveDependencies(requested)
 
         class ComposedClass extends Compose {
             constructor(...args: any[]) {

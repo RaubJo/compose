@@ -43,6 +43,50 @@ Trait classes are used as plain property/method bags:
   arguments passed to `new Model(...)` are only forwarded to `Compose`'s own
   constructor, not to the traits.
 
+## Dependencies
+
+A trait can declare other traits it needs via a static `requires` list. The
+caller only has to ask for the capability it wants; `requires` is expanded
+automatically:
+
+```ts
+class HasAttributes {
+	attributes: Record<string, unknown> = {}
+}
+
+class HasCasts {
+	static requires = [HasAttributes] as const
+
+	cast(value: number) {
+		return value * 2
+	}
+}
+
+class Model extends Compose.with(HasCasts) {}
+
+const model = new Model()
+
+model.attributes.name = "Example" // typechecks, even though HasAttributes
+model.cast(3) // 6                // was never passed to Compose.with()
+```
+
+- `requires` is resolved recursively — a required trait's own `requires` are
+  pulled in too.
+- A shared dependency is only composed once, however many traits require it,
+  and deduplication is by constructor identity (not class name).
+- Dependencies are always composed before the trait that requires them.
+  Unrelated traits otherwise keep the order you passed to `Compose.with()`.
+- A dependency cycle (`A` requires `B` requires `A`) throws instead of
+  recursing forever: `Composition dependency cycle: A -> B -> A`.
+- `requires` must be declared explicitly. Extending a trait with `extends`
+  is plain JS inheritance and is never treated as a composition dependency.
+
+The `as const` on `requires` is what makes a dependency's members show up on
+the composed instance's *type*. Without it, `requires = [HasAttributes]`
+still composes and works fine at runtime — TS just widens the array to
+`Constructor[]`, losing which constructor is in it, so it can't add
+`attributes` to `Model`'s type. `as const` keeps it a literal tuple instead.
+
 ## Conflicts
 
 If two traits (or a trait and the class itself) define the same property or
